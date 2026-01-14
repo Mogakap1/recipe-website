@@ -1,0 +1,260 @@
+{% extends 'recipes/base.html' %}
+
+{% block title %}{{ recipe.title }} - Recipe Collection{% endblock %}
+
+{% block extra_css %}
+<style>
+    .recipe-header {
+        background: white;
+        border-radius: 16px;
+        padding: 3rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    .recipe-emoji {
+        font-size: 6rem;
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .recipe-title-detail {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #2c3e50;
+        text-align: center;
+        margin-bottom: 1rem;
+        line-height: 1.2;
+    }
+
+    .recipe-category-detail {
+        display: inline-block;
+        background: #f0f3ff;
+        color: #667eea;
+        padding: 0.5rem 1.5rem;
+        border-radius: 25px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        text-transform: capitalize;
+    }
+
+    .category-container {
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .recipe-meta-detail {
+        display: flex;
+        justify-content: center;
+        gap: 3rem;
+        padding: 1.5rem;
+        background: #f8f9fa;
+        border-radius: 12px;
+        margin-top: 1.5rem;
+    }
+
+    .meta-item-detail {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .meta-icon {
+        font-size: 2rem;
+    }
+
+    .meta-label {
+        font-size: 0.85rem;
+        color: #7f8c8d;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .meta-value {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #2c3e50;
+    }
+
+    .recipe-section {
+        background: white;
+        border-radius: 16px;
+        padding: 2.5rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    .section-heading {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #2c3e50;
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 3px solid #667eea;
+    }
+
+    .ingredients-list {
+        list-style: none;
+        padding: 0;
+    }
+
+    .ingredients-list li {
+        padding: 0.75rem 0;
+        border-bottom: 1px solid #e8eaf0;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-size: 1.05rem;
+    }
+
+    .ingredients-list li:before {
+        content: "✓";
+        color: #667eea;
+        font-weight: bold;
+        font-size: 1.2rem;
+        flex-shrink: 0;
+    }
+
+    .ingredients-list li:last-child {
+        border-bottom: none;
+    }
+
+    .instructions-list {
+        counter-reset: step-counter;
+        list-style: none;
+        padding: 0;
+    }
+
+    .instructions-list li {
+        counter-increment: step-counter;
+        padding: 1.25rem;
+        padding-left: 4rem;
+        margin-bottom: 1rem;
+        background: #f8f9fa;
+        border-radius: 12px;
+        position: relative;
+        font-size: 1.05rem;
+        line-height: 1.6;
+    }
+
+    .instructions-list li:before {
+        content: counter(step-counter);
+        position: absolute;
+        left: 1.25rem;
+        top: 1.25rem;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        width: 2rem;
+        height: 2rem;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 0.9rem;
+    }
+
+    .back-button {
+        display: inline-block;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 0.75rem 2rem;
+        border-radius: 25px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: transform 0.3s, box-shadow 0.3s;
+        margin-bottom: 2rem;
+    }
+
+    .back-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    }
+
+    @media (max-width: 768px) {
+        .recipe-header {
+            padding: 2rem;
+        }
+
+        .recipe-emoji {
+            font-size: 4rem;
+        }
+
+        .recipe-title-detail {
+            font-size: 1.8rem;
+        }
+
+        .recipe-meta-detail {
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .recipe-section {
+            padding: 1.5rem;
+        }
+
+        .section-heading {
+            font-size: 1.5rem;
+        }
+
+        .instructions-list li {
+            padding: 1rem;
+            padding-left: 3.5rem;
+        }
+
+        .instructions-list li:before {
+            left: 1rem;
+            top: 1rem;
+            width: 1.75rem;
+            height: 1.75rem;
+            font-size: 0.85rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <a href="{% url 'recipes:recipe_list' %}" class="back-button">← Back to Recipes</a>
+    
+    <div class="recipe-header">
+        <div class="recipe-emoji">{{ recipe.emoji }}</div>
+        <h1 class="recipe-title-detail">{{ recipe.title }}</h1>
+        <div class="category-container">
+            <span class="recipe-category-detail">{{ recipe.category }}</span>
+        </div>
+        
+        <div class="recipe-meta-detail">
+            <div class="meta-item-detail">
+                <span class="meta-icon">⏱️</span>
+                <span class="meta-label">Cooking Time</span>
+                <span class="meta-value">{{ recipe.cooking_time }} mins</span>
+            </div>
+            <div class="meta-item-detail">
+                <span class="meta-icon">👥</span>
+                <span class="meta-label">Servings</span>
+                <span class="meta-value">{{ recipe.servings }}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="recipe-section">
+        <h2 class="section-heading">Ingredients</h2>
+        <ul class="ingredients-list">
+            {% for ingredient in recipe.get_ingredients_list %}
+                <li>{{ ingredient }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="recipe-section">
+        <h2 class="section-heading">Instructions</h2>
+        <ol class="instructions-list">
+            {% for instruction in recipe.get_instructions_list %}
+                <li>{{ instruction }}</li>
+            {% endfor %}
+        </ol>
+    </div>
+</div>
+{% endblock %}

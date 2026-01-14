@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Recipe Collection{% endblock %}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 3rem 0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .tagline {
+            font-size: 1.2rem;
+            opacity: 0.95;
+            font-weight: 300;
+        }
+
+        nav {
+            background: white;
+            padding: 1.2rem 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .categories {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .category-link {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+        }
+
+        .category-link:hover {
+            background: #f0f3ff;
+            color: #764ba2;
+        }
+
+        .category-link.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-form {
+            display: flex;
+        }
+
+        .search-bar {
+            padding: 0.7rem 1.2rem;
+            border: 2px solid #e8eaf0;
+            border-radius: 30px;
+            width: 280px;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+        }
+
+        .search-bar:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        main {
+            padding: 3rem 0;
+            min-height: 60vh;
+        }
+
+        footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 4rem;
+        }
+
+        footer p {
+            margin: 0;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .tagline {
+                font-size: 1rem;
+            }
+            
+            .nav-content {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .categories {
+                gap: 0.5rem;
+                justify-content: center;
+            }
+            
+            .category-link {
+                font-size: 0.85rem;
+                padding: 0.4rem 0.8rem;
+            }
+            
+            .search-bar {
+                width: 100%;
+            }
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>🍳 My Recipe Collection</h1>
+            <p class="tagline">Discover and save your favorite recipes</p>
+        </div>
+    </header>
+
+    <nav>
+        <div class="container nav-content">
+            <div class="categories">
+                <a href="{% url 'recipes:recipe_list' %}" class="category-link {% if not selected_category %}active{% endif %}">All Recipes</a>
+                <a href="?category=breakfast" class="category-link {% if selected_category == 'breakfast' %}active{% endif %}">Breakfast</a>
+                <a href="?category=lunch" class="category-link {% if selected_category == 'lunch' %}active{% endif %}">Lunch</a>
+                <a href="?category=dinner" class="category-link {% if selected_category == 'dinner' %}active{% endif %}">Dinner</a>
+                <a href="?category=desserts" class="category-link {% if selected_category == 'desserts' %}active{% endif %}">Desserts</a>
+                <a href="?category=vegetarian" class="category-link {% if selected_category == 'vegetarian' %}active{% endif %}">Vegetarian</a>
+            </div>
+            <div class="search-box">
+                <form method="get" action="{% url 'recipes:recipe_list' %}" class="search-form">
+                    <input type="text" name="search" class="search-bar" placeholder="🔍 Search recipes..." value="{{ search_query|default:'' }}">
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 My Recipe Collection. Built with Django ❤️</p>
+        </div>
+    </footer>
+</body>
+</html>
